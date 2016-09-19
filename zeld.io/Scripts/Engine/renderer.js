@@ -15,6 +15,16 @@ function Renderer(canvas) {
         
         context.restore();
     };
+    this.drawRect = function (x, y, width, height, thickness, color) {
+        context.save();
+        
+        this.drawLine(x, y, x + width, y, thickness, color);
+        this.drawLine(x, y + height, x + width, y + height, thickness, color);
+        this.drawLine(x, y, x, y + height, thickness, color);
+        this.drawLine(x + width, y, x + width, y + height, thickness, color);
+
+        context.restore();
+    };
     this.drawImage = function (image, x, y, angle) {
         context.save();
         context.translate(x, y);
@@ -28,24 +38,6 @@ function Renderer(canvas) {
         context.rotate(toRadians(angle));
         context.drawImage(image, cx, cy, cwidth, cheight, -(cwidth * 0.5), -(cheight * 0.5), cwidth, cheight);
         context.restore();
-    };
-    this.drawGrid = function (leftColumn, rightColumn, topColumn, botColumn, offsetX, offsetY, gridSize, gridColor, thickness) {
-        // render horizontal lines
-        for (var i = topColumn; i < botColumn; i++) {
-            var x1 = leftColumn * gridSize + offsetX;
-            var y1 = i * gridSize + offsetY;
-            var x2 = rightColumn * gridSize + offsetX;
-            var y2 = i * gridSize + offsetY;
-            this.drawLine(x1, y1, x2, y2, thickness, gridColor);
-        }
-        // render vertical lines
-        for (var i = leftColumn; i < rightColumn; i++) {
-            var x1 = i * gridSize + offsetX;
-            var y1 = topColumn * gridSize + offsetY;
-            var x2 = i * gridSize + offsetX;
-            var y2 = botColumn * gridSize + offsetY;
-            this.drawLine(x1, y1, x2, y2, thickness, gridColor);
-        }
     };
     this.clear = function () {
         context.clearRect(0, 0, canvas.width, canvas.height);

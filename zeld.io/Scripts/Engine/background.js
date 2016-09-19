@@ -1,35 +1,40 @@
 ﻿function Background (canvas, tileSize, lineColor, lineWidth) {
 
-    this.left = 0;
-    this.top = 0;
-    this.right = 0;
-    this.bottom = 0;
+    var left = 0;
+    var top = 0;
+    var right = 0;
+    var bottom = 0;
+
+    var boundsLeft = 0;
+    var boundsTop = 10;
+    var boundsRight = 40;
+    var boundsBottom = 20;
 
     this.update = function (dt, offsetX, offsetY) {
-        if (this.right * tileSize - offsetX < canvas.width) {
-            this.right += 1;
+        if (right * tileSize - offsetX < canvas.width) {
+            right += 1;
         }
-        if ((this.right - 1) * tileSize - offsetX > canvas.width) {
-            this.right -= 1;
+        if ((right - 1) * tileSize - offsetX > canvas.width) {
+            right -= 1;
         }
-        if ((this.left + 1) * tileSize - offsetX < 0) {
-            this.left += 1;
+        if ((left + 1) * tileSize - offsetX < 0) {
+            left += 1;
         }
-        if (this.left * tileSize - offsetX > 0) {
-            this.left -= 1;
+        if (left * tileSize - offsetX > 0) {
+            left -= 1;
         }
 
-        if (this.bottom * tileSize - offsetY < canvas.height) {
-            this.bottom += 1;
+        if (bottom * tileSize - offsetY < canvas.height) {
+            bottom += 1;
         }
-        if ((this.bottom - 1) * tileSize - offsetY > canvas.height) {
-            this.bottom -= 1;
+        if ((bottom - 1) * tileSize - offsetY > canvas.height) {
+            bottom -= 1;
         }
-        if ((this.top + 1) * tileSize - offsetY < 0) {
-            this.top += 1;
+        if ((top + 1) * tileSize - offsetY < 0) {
+            top += 1;
         }
-        if (this.top * tileSize - offsetY > 0) {
-            this.top -= 1;
+        if (top * tileSize - offsetY > 0) {
+            top -= 1;
         }
     }
 
@@ -37,19 +42,21 @@
         var columnCount = Math.ceil(canvas.width / tileSize);
         var rowCount = Math.ceil(canvas.height / tileSize);
 
-        this.right = this.left + columnCount;
-        this.bottom = this.top + rowCount;
+        right = left + columnCount;
+        bottom = top + rowCount;
     }
 
+    var drawGrid = function (renderer, offsetX, offsetY) {
+        for (var horizontal = left; horizontal < right; horizontal++) {
+            for (var vertical = top; vertical < bottom; vertical++) {
+                var x = horizontal * tileSize + offsetX;
+                var y = vertical * tileSize + offsetY;
+                renderer.drawRect(x, y, tileSize, tileSize, lineWidth, lineColor);
+            }
+        }
+    };
+
     this.draw = function (renderer, offsetX, offsetY) {
-        renderer.drawGrid(this.left,
-            this.right,
-            this.top,
-            this.bottom,
-            -offsetX,
-            -offsetY,
-            tileSize,
-            lineColor,
-            lineWidth);
+        drawGrid(renderer, -offsetX, -offsetY);
     }
 }
